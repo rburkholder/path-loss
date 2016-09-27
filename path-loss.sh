@@ -5,8 +5,14 @@
 # raymond@burkholder.net
 # http://blog.raymond.burkholder.net
 
-# requires use of (with some modifications, will post):
-#   https://github.com/enigma-io/pd-trigger
+# requires use of:
+# https://github.com/juanpabloaj/slacker-cli but install with pip
+# https://api.slack.com/bot-users
+# https://my.slack.com/apps/build/custom-integration, choose bots, create new one, and add token
+# https://my.slack.com/admin#disabled)  to delete test bots
+# apt-get install python-pip
+# pip install slacker-cli
+# #git clone https://pypi.python.org/pypi/slacker-cli/
 
 # user defined settings
 txtEmail="name@example.com"
@@ -15,6 +21,8 @@ txtSeparator="==============================\n"
 nTrigger=4
 nAttempts=5
 txtPdServiceKey="000000000000000"
+txtSlackBotToken="xoxb-something-or-other"
+txtSlackChannel="pathloss"
 
 declare -A nodes
 nodes=( \
@@ -116,7 +124,8 @@ else
       response=$(cat ${tmpLog} | ./pd-trigger.sh -L -s "${txtPdServiceKey}" -d "${status}")
       fi
     # attempt an email
-    cat ${tmpLog} | mail -s "${txtSubject}:${status}" ${txtEmail};
+    #cat ${tmpLog} | mail -s "${txtSubject}:${status}" ${txtEmail};
+    cat ${tmpLog} | /usr/local/bin/slacker -c ${txtSlackChannel} -t ${txtSlackBotToken}
     fi
   fi
 
